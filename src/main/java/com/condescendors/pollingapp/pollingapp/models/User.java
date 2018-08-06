@@ -50,7 +50,7 @@ public class User extends DateAudit implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name = "user_auhtority",
+            name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "name")
     )
