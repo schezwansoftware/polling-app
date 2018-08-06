@@ -1,0 +1,30 @@
+## Server Properties
+server:
+  port: 5300
+
+
+## Application properties
+spring:
+  application:
+    name: pollingApp
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+    username: root
+    password:
+  jpa:
+    properties:
+        hibernate:
+           dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+  jackson:
+    serialization:
+       WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
+logging:
+  level:
+    hibernate:
+       SQL: DEBUG
+
+
+
