@@ -1,5 +1,6 @@
 package com.condescendors.pollingapp.pollingapp.security.jwt;
 
+import com.condescendors.pollingapp.pollingapp.constants.AppConstants;
 import com.condescendors.pollingapp.pollingapp.security.CustomUserDetailService;
 import com.condescendors.pollingapp.pollingapp.security.UserPrincipal;
 import org.slf4j.Logger;
@@ -26,8 +27,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 
     @Autowired
     private CustomUserDetailService customUserDetailService;
-
-    private static final String AUTH_HEADER="Authorization";
 
     private final Logger logger= LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
@@ -60,7 +59,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 
 
     private String resolveToken(HttpServletRequest request){
-        String bearerToken = request.getHeader(AUTH_HEADER);
+        String bearerToken = request.getHeader(AppConstants.AUTH_HEADER);
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
             return bearerToken.substring(7,bearerToken.length());
