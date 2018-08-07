@@ -26,5 +26,15 @@ logging:
     hibernate:
        SQL: DEBUG
 
+application:
+    security:
+       authentication:
+           jwt:
+             secret: 1b6de3d81a12433e4b774a8cb244f0558de5f347
+            # Token is valid 24 hours
+             token-validity-in-seconds: 86400
+             token-validity-in-seconds-for-remember-me: 2592000
+
+
 
 
