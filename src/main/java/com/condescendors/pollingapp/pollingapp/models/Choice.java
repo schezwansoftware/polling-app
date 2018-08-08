@@ -25,6 +25,10 @@ public class Choice implements Serializable{
     public Choice() {
     }
 
+    public Choice(@NotBlank @Size(min = 4, max = 50) String text) {
+        this.text = text;
+    }
+
     public Long getId() {
         return id;
     }
