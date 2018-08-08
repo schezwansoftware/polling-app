@@ -6,6 +6,7 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -23,22 +24,18 @@ public class User extends DateAudit implements Serializable {
     private Long id;
 
     @NotBlank
-    @Max(value = 25)
     @Column(name = "first_name")
     private String firstName;
 
-    @Max(value = 25)
     @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
-    @Max(value = 15)
     @NotBlank
     @Column(name = "login")
     private String userName;
 
     @NaturalId
-    @Max(value = 100)
     @NotBlank
     @Column(name = "email")
     private String email;
@@ -57,7 +54,7 @@ public class User extends DateAudit implements Serializable {
     @Column(name = "authorities")
     private Set<Authority> roles=new HashSet<>();
 
-    public User(@NotBlank @Max(value = 25) String firstName, @Max(value = 25) @NotBlank String lastName, @Max(value = 15) @NotBlank String userName, @Max(value = 100) @NotBlank String email, @NotBlank String password, Set<Authority> roles) {
+    public User(@NotBlank  String firstName, @NotBlank String lastName,  @NotBlank String userName,  @NotBlank String email, @NotBlank String password, Set<Authority> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
@@ -124,5 +121,15 @@ public class User extends DateAudit implements Serializable {
 
     public void setRoles(Set<Authority> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + userName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                "}";
     }
 }

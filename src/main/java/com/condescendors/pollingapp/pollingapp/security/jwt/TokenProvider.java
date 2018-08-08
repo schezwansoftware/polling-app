@@ -57,6 +57,7 @@ public class TokenProvider {
     }
 
     public Long getUserFromJWT(String authToken) {
+        log.info("getting user from jwt");
         Claims claims = Jwts
                 .parser()
                 .setSigningKey(jwtSecret)
@@ -68,6 +69,7 @@ public class TokenProvider {
     public Boolean validateToken(String authToken){
        try {
            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+           return true;
        }catch (SignatureException exception){
 
            log.error("Invalid JWT Signature");
