@@ -4,8 +4,9 @@ import { Layout, Menu ,Icon} from 'antd';
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
-const NavBar=()=>{
+
+
+const NavBar=() => {
 
     return(
 <Layout className="layout">
