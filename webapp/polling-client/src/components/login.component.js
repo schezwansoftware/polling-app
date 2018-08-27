@@ -1,6 +1,8 @@
 import React,{Component} from 'react';
 import { Form, Icon, Input, Button, Checkbox, Card, Modal} from 'antd';
+import {login} from '../services/posts.service';
 import './styles/css/login.css';
+import {ACCESS_TOKEN} from '../constants/constants';
 import {Link} from 'react-router-dom';
 
 
@@ -23,13 +25,33 @@ class AntWrappedLoginForm extends Component{
    
     handleSubmit = (e) => {
         e.preventDefault();
+
         this.props.form.validateFields((err, values) => {
           if (!err) {
-            console.log('Received values of form: ', values);
-            Modal.success({
+            const loginRequest=Object.assign({},values);
+
+            login(loginRequest).then(response => {
+
+              localStorage.setItem(ACCESS_TOKEN,response.id_token);
+
+              Modal.success({
 
                 title:'LogIn Success',
                 content: 'You have logged in Successfully'
+            });
+
+            }).catch(err => {
+              if(err.status === 401){
+                Modal.error({
+                  title: 'Bad Credentials',
+                  content: 'Invalid User Name or Password'
+                });
+              }else{
+                Modal.error({
+                  title: 'Internal Server Error',
+                  content: 'Ooops!! Something went Wrong'
+                });
+              }
             });
           }
         });
@@ -40,7 +62,7 @@ class AntWrappedLoginForm extends Component{
         return(
             <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem>
-          {getFieldDecorator('userName', {
+          {getFieldDecorator('login', {
             rules: [{ required: true, message: 'Please input your username!' }],
           })(
             <Input size="large" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
@@ -54,7 +76,7 @@ class AntWrappedLoginForm extends Component{
           )}
         </FormItem>
         <FormItem>
-          {getFieldDecorator('remember', {
+          {getFieldDecorator('rememberMe', {
             valuePropName: 'checked',
             initialValue: true,
           })(
