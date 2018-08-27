@@ -43,3 +43,7 @@ export function getCurrentUser(){
         });
     }
 }
+
+export function logout(){
+    localStorage.removeItem(ACCESS_TOKEN);
+}
