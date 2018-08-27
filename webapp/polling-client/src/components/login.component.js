@@ -39,7 +39,6 @@ class AntWrappedLoginForm extends Component{
         this.props.form.validateFields((err, values) => {
           if (!err) {
             const loginRequest=Object.assign({},values);
-
             this.setState({
               isLoading : true
             });
