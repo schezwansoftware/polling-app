@@ -9,14 +9,13 @@ import {Link} from 'react-router-dom';
 
 const FormItem =Form.Item;
 class Login extends Component{
-
   render(){
     const LoginForm=Form.create()(AntWrappedLoginForm);
     return (
    <div className="login-container">
      <Card title="Log In">
         <div className="login-content">
-           <LoginForm />
+           <LoginForm onLogin={this.props.onLogin} {...this.props} />
         </div>
      </Card>
     </div>
@@ -32,6 +31,7 @@ class AntWrappedLoginForm extends Component{
     this.state={
       isLoading: false
     }
+    this.handleSubmit=this.handleSubmit.bind(this);
   }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -45,13 +45,7 @@ class AntWrappedLoginForm extends Component{
             login(loginRequest).then(response => {
 
               localStorage.setItem(ACCESS_TOKEN,response.id_token);
-
-              Modal.success({
-
-                title:'LogIn Success',
-                content: 'You have logged in Successfully'
-            });
-
+              this.props.onLogin();
             this.setState({
               isLoading : false
             });

@@ -2,7 +2,6 @@ import React,{Component} from "react";
 
 import { Layout, Menu ,Icon} from 'antd';
 import {NavLink} from 'react-router-dom';
-import {logout} from '../services/posts.service';
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 

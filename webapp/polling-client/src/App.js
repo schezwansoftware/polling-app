@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import NavBar from './components/navbar.component';
-import {BrowserRouter as Router , Route,Switch} from 'react-router-dom';
+import {withRouter , Route,Switch} from 'react-router-dom';
 import {getCurrentUser} from './services/posts.service';
 import {ACCESS_TOKEN} from './constants/constants';
 import Home from './components/home.component';
@@ -11,7 +11,6 @@ import Login from './components/login.component';
 import Register from './components/register.component';
 import Profile from './components/profile.component';
 import {Modal} from 'antd';
-import {Redirect}from 'react-router-dom';
 
 class App extends Component {
 
@@ -24,6 +23,8 @@ class App extends Component {
     }
 
     this.onLogout=this.onLogout.bind(this);
+    this.loadCurrentUser=this.loadCurrentUser.bind(this);
+    this.onLogin=this.onLogin.bind(this);
   }
 
   componentWillMount(){
@@ -48,36 +49,38 @@ class App extends Component {
       isAuthenticated: false,
       redirect: true
     });
-    this.redirect('/');
+    this.props.history.push("/");
     Modal.success({
       title:'Successful Log-out',
       content: 'You have been succesfully logged out'
     });
 
   }
-  redirect(path){
-    if(this.state.redirect){
-      return <Redirect to={path} />
-    }
+
+  onLogin(){
+    Modal.success({
+      title: 'Login Successfull',
+      content: 'You have successfully logged in'
+    });
+    this.props.history.push("/");
+    this.loadCurrentUser();
   }
 
   render() {
     return (
-      <Router>
         <div className="App">
         <NavBar isAuthenticated={this.state.isAuthenticated} principal={this.state.currentUser} onLogout={this.onLogout}/>
         <Switch>
           <Route path="/" exact component={Home}></Route>
           <Route path="/about" exact component={About}></Route>
           <Route path="/contact" exact component={Contact}></Route>
-          <Route path="/login" exact component={Login}></Route>
+          <Route path="/login"  render={(props)=> <Login onLogin={this.onLogin} {...props}/>}></Route>
           <Route path="/register" exact component={Register}></Route>
           <Route path="/profile" exact component={Profile}></Route>
         </Switch>
         </div>
-      </Router>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
