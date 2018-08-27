@@ -12,7 +12,7 @@ const Login=()=> {
     return (
    <div className="login-container">
      <Card title="Log In">
-        <div className="logn-content">
+        <div className="login-content">
            <LoginForm />
         </div>
      </Card>

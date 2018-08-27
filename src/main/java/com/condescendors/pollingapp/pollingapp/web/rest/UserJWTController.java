@@ -36,7 +36,7 @@ public class UserJWTController {
 
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authenticate(@Valid @RequestBody LoginVM loginVM){
+    public ResponseEntity<JWTToken> authenticate( @RequestBody LoginVM loginVM){
         Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginVM.getLogin(),loginVM.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         boolean rememberMe=(loginVM.getRememberMe()==null)?false:loginVM.getRememberMe();
