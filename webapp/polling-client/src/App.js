@@ -62,8 +62,8 @@ class App extends Component {
       title: 'Login Successfull',
       content: 'You have successfully logged in'
     });
-    this.props.history.push("/");
     this.loadCurrentUser();
+    this.props.history.push("/");
   }
 
   render() {

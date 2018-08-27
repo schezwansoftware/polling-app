@@ -15,7 +15,7 @@ class Login extends Component{
    <div className="login-container">
      <Card title="Log In">
         <div className="login-content">
-           <LoginForm onLogin={this.props.onLogin} {...this.props} />
+           <LoginForm onLogin={this.props.onLogin} />
         </div>
      </Card>
     </div>
