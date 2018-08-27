@@ -24,5 +24,5 @@ export function login(loginVM){
        url : API_BASE_URL + "/api/authenticate",
        method : 'POST',
        body : JSON.stringify(loginVM)
-   })
+   });
 }
