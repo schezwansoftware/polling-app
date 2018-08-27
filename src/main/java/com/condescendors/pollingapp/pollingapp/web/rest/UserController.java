@@ -5,6 +5,7 @@ import com.condescendors.pollingapp.pollingapp.models.User;
 import com.condescendors.pollingapp.pollingapp.payloads.UserProfile;
 import com.condescendors.pollingapp.pollingapp.payloads.UserSummary;
 import com.condescendors.pollingapp.pollingapp.repository.UserRepository;
+import com.condescendors.pollingapp.pollingapp.security.SecurityUtils;
 import com.condescendors.pollingapp.pollingapp.web.rest.error.ResourceNotFoundException;
 import com.condescendors.pollingapp.pollingapp.web.rest.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -37,5 +38,12 @@ public class UserController {
     @GetMapping("/users/{login}")
     public ResponseEntity<UserSummary> getUserWithAuthoritiesByLogin(@PathVariable String login){
         return ResponseUtil.wrapOrNotFound(userRepository.findByUserName(login).map(user -> new UserSummary(user.getId(),user.getUserName(),user.getFirstName()+" "+user.getLastName())));
+    }
+
+
+    @GetMapping("/users/me")
+    public ResponseEntity<User>getCurrentUser(){
+        String curretnUser= SecurityUtils.getCurrentUserLogin();
+        return ResponseUtil.wrapOrNotFound(userRepository.findByUserName(curretnUser));
     }
 }
