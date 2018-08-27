@@ -1,0 +1,40 @@
+## Server Properties
+server:
+  port: 5300
+
+
+## Application properties
+spring:
+  application:
+    name: pollingApp
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+    username: root
+    password:
+  jpa:
+    properties:
+        hibernate:
+           dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+  jackson:
+    serialization:
+       WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
+logging:
+  level:
+    hibernate:
+       SQL: DEBUG
+
+application:
+    security:
+       authentication:
+           jwt:
+             secret: 1b6de3d81a12433e4b774a8cb244f0558de5f347
+            # Token is valid 24 hours
+             token-validity-in-seconds: 86400
+             token-validity-in-seconds-for-remember-me: 2592000
+
+
+
+
