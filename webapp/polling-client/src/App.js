@@ -11,6 +11,8 @@ import Login from './components/login.component';
 import Register from './components/register.component';
 import Profile from './components/profile.component';
 import {Modal} from 'antd';
+import PrivateRoute from './commons/privateroute';
+import NotFound from './components/notfound.component';
 
 class App extends Component {
 
@@ -76,7 +78,9 @@ class App extends Component {
           <Route path="/contact" exact component={Contact}></Route>
           <Route path="/login"  render={(props)=> <Login onLogin={this.onLogin} {...props}/>}></Route>
           <Route path="/register" exact component={Register}></Route>
+          <PrivateRoute isAuthenticated={this.state.isAuthenticated} path='/profile' component={Profile} handleLogout={this.handleLogout}></PrivateRoute>
           <Route path="/profile" exact component={Profile}></Route>
+          <Route component={NotFound}/>
         </Switch>
         </div>
     );
