@@ -1,10 +1,15 @@
-import {API_BASE_URL} from '../constants/constants';
+import {API_BASE_URL,ACCESS_TOKEN} from '../constants/constants';
 
 const request=(options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin' : '*'
     });
+
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
  
@@ -24,5 +29,21 @@ export function login(loginVM){
        url : API_BASE_URL + "/api/authenticate",
        method : 'POST',
        body : JSON.stringify(loginVM)
-   })
+   });
+}
+
+
+export function getCurrentUser(){
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }else{
+        return request({
+            url : API_BASE_URL + "/api/users/me",
+            method: "GET" 
+        });
+    }
+}
+
+export function logout(){
+    localStorage.removeItem(ACCESS_TOKEN);
 }
