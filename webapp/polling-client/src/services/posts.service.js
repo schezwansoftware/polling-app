@@ -1,4 +1,4 @@
-import {API_BASE_URL,ACCESS_TOKEN} from '../constants/constants';
+import {ACCESS_TOKEN} from '../constants/constants';
 
 const request=(options) => {
     const headers = new Headers({
@@ -26,7 +26,7 @@ const request=(options) => {
 
 export function login(loginVM){
    return request({
-       url : API_BASE_URL + "/api/authenticate",
+       url : "/api/authenticate",
        method : 'POST',
        body : JSON.stringify(loginVM)
    });
@@ -38,7 +38,7 @@ export function getCurrentUser(){
         return Promise.reject("No access token set.");
     }else{
         return request({
-            url : API_BASE_URL + "/api/users/me",
+            url : "/api/users/me",
             method: "GET" 
         });
     }

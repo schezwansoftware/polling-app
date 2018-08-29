@@ -78,8 +78,7 @@ class App extends Component {
           <Route path="/contact" exact component={Contact}></Route>
           <Route path="/login"  render={(props)=> <Login onLogin={this.onLogin} {...props}/>}></Route>
           <Route path="/register" exact component={Register}></Route>
-          <PrivateRoute isAuthenticated={this.state.isAuthenticated} path='/profile' component={Profile} handleLogout={this.handleLogout}></PrivateRoute>
-          <Route path="/profile" exact component={Profile}></Route>
+          <PrivateRoute isAuthenticated={this.state.isAuthenticated} path='/profile' component={Profile} currentUser={this.state.currentUser} handleLogout={this.handleLogout}></PrivateRoute>
           <Route component={NotFound}/>
         </Switch>
         </div>
