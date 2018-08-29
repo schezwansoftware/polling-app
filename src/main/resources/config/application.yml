@@ -5,6 +5,8 @@ server:
 
 ## Application properties
 spring:
+  profiles:
+    active: dev
   application:
     name: pollingApp
   datasource:
