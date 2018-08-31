@@ -47,3 +47,25 @@ export function getCurrentUser(){
 export function logout(){
     localStorage.removeItem(ACCESS_TOKEN);
 }
+
+
+export function register(managedUserVM){
+    console.log(managedUserVM);
+}
+
+export function checkUserNameAvailability(userName){
+    const url=`/api/account/username-available/${userName}`;
+   return fetch(url,{
+       method: 'GET'
+   }).then(response =>{
+       if(response.status === 202){
+           return true;
+       }else if(response.status === 400){
+           return false;
+       }
+   });
+}
+
+export function checkEmailAvailability(email){
+    
+}
