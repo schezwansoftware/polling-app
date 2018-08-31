@@ -50,7 +50,11 @@ export function logout(){
 
 
 export function register(managedUserVM){
-    console.log(managedUserVM);
+   return request({
+        url: '/api/account/register',
+        method: 'POST',
+        body: JSON.stringify(managedUserVM)
+    });
 }
 
 export function checkUserNameAvailability(userName){
@@ -67,5 +71,14 @@ export function checkUserNameAvailability(userName){
 }
 
 export function checkEmailAvailability(email){
-    
+    const url= `/api/account/email-available/${email}`;
+    return fetch(url,{
+        method: 'GET'
+    }).then(response => {
+        if(response.status === 202){
+            return true;
+        }else if(response.status === 400){
+            return false;
+        }
+    });
 }

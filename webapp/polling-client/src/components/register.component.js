@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { Form, Input, Button, Card } from 'antd';
+import { Form, Input, Button, Card, Modal,Alert } from 'antd';
 import {Link} from 'react-router-dom';
 import './styles/css/register.css';
 
@@ -9,8 +9,9 @@ import {
     EMAIL_MAX_LENGTH,
     PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH
 } from '../constants/constants';
-import { register, checkUserNameAvailability } from '../services/posts.service';
+import { register, checkUserNameAvailability, checkEmailAvailability } from '../services/posts.service';
 import { ManagedUserVM as managedUserVM } from '../models/managed-user';
+import LoadingIndicator from '../commons/loading-indicator';
 
 
 const FormItem = Form.Item;
@@ -38,7 +39,8 @@ class Register extends Component{
             confirmPassword: {
                value:'' 
             },
-            isSaving: false
+            isSaving: false,
+            isRegistered: false
         }
         this.handleSubmit=this.handleSubmit.bind(this);
     }
@@ -65,7 +67,31 @@ class Register extends Component{
         managedUserVM.userName=this.state.username.value;
         managedUserVM.password=this.state.password.value;
 
-        register(managedUserVM);
+        if(!this.isFormInvalid()){
+            this.setState({
+                isSaving: true
+            });
+            register(managedUserVM).then(()=> {
+        
+                Modal.success({
+                    title: 'Registration Successfull',
+                    content: 'You have been registered successfully'
+                });
+                this.setState({
+                    isSaving: false,
+                    isRegistered: true
+                });
+            }).catch(() => {
+
+                Modal.error({
+                    title: 'Registration Error',
+                    content: 'Sorry Something went wrong'
+                });
+                this.setState({
+                    isSaving: false,
+                });
+            });
+        }
     }
 
 
@@ -79,7 +105,30 @@ class Register extends Component{
         );
     }
 
+    renderFooter(){
+        if(this.state.isSaving){
+            return <LoadingIndicator />;
+        }else{
+            return (
+                <FormItem>
+                            <Button type="primary" 
+                                htmlType="submit" 
+                                size="large" 
+                                className="signup-form-button"
+                                disabled={this.isFormInvalid()}
+                                onClick={this.handleSubmit}
+
+                            >Sign up</Button>
+                            Already registed? <Link to="/login">Login now!</Link>
+                        </FormItem>
+            );
+        }
+    }
+
     render(){
+        if (this.state.isRegistered){
+            return   <Alert message="You Have been successfully regisreterd" type="success" />;
+        }else
         return (
             <div className="signup-container">
                 <Card title="Register Here">
@@ -124,7 +173,7 @@ class Register extends Component{
                                 autoComplete="off"
                                 placeholder="A unique username"
                                 value={this.state.username.value} 
-                                onBlur={this.validateUsernameAvailabiltiy}
+                                onBlur={this.validateUsernameAvailability}
                                 onChange={(event) => this.handleInputChange(event, this.validateUsername)}
                             />    
                         </FormItem>
@@ -141,6 +190,7 @@ class Register extends Component{
                                 autoComplete="off"
                                 placeholder="Your email"
                                 value={this.state.email.value} 
+                                onBlur={this.validateEmailAvailablity}
                                 onChange={(event) => this.handleInputChange(event, this.validateEmail)}
                              />    
                         </FormItem>
@@ -178,17 +228,7 @@ class Register extends Component{
                             />    
                         </FormItem>
 
-                        <FormItem>
-                            <Button type="primary" 
-                                htmlType="submit" 
-                                size="large" 
-                                className="signup-form-button"
-                                disabled={this.isFormInvalid()}
-                                onClick={this.handleSubmit}
-
-                            >Sign up</Button>
-                            Already registed? <Link to="/login">Login now!</Link>
-                        </FormItem>
+                        {this.renderFooter()}
                     </Form>
                 </div>
 
@@ -218,7 +258,7 @@ validateFirstName = (firstName) => {
     }
 }
 
-validateUsernameAvailabiltiy=()=>{
+validateUsernameAvailability=()=>{
      // First check for client side errors in username
      const usernameValue = this.state.username.value;
      const usernameValidation = this.validateUsername(usernameValue);
@@ -261,6 +301,48 @@ validateUsernameAvailabiltiy=()=>{
          }
      });
 }
+
+    validateEmailAvailablity=()=>{
+        const emailValue=this.state.email.value;
+        const validationStatus=this.validateEmail(emailValue);
+
+        if(validationStatus === 'error'){
+            this.setState({
+                email: {
+                    value: emailValue,
+                    ...validationStatus
+                }
+            });
+            return;
+        }
+
+        this.setState({
+            email: {
+                value : emailValue,
+                validateStatus: 'validating',
+                errorMsg: null
+            }
+        });
+        checkEmailAvailability(emailValue).then(available => {
+            if(available){
+                this.setState({
+                    email: {
+                        value: emailValue,
+                        validateStatus: 'success',
+                        errorMsg: 'Email is Available'
+                    }
+                });
+            }else{
+                this.setState({
+                    email: {
+                        value: emailValue,
+                        validateStatus: 'error',
+                        errorMsg: 'Email is already taken'
+                    }
+                });
+            }
+        });
+    }
 
 validateLastName = (lastName) => {
     if(lastName.length < NAME_MIN_LENGTH) {
@@ -361,7 +443,6 @@ validateUsername = (username) => {
                 errorMsg: 'Passwords do not match'
             }
         }
-
     }
 }
 
