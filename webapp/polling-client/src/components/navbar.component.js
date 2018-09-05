@@ -25,7 +25,7 @@ class NavBar extends Component {
 
     if(!this.props.isAuthenticated){
       menuItems=[
-        <Menu.Item key="/"><NavLink to="/">Home</NavLink></Menu.Item>,
+        <Menu.Item key="/"><NavLink to="/"><Icon type="home"/>Home</NavLink></Menu.Item>,
         <Menu.Item key="/about"><NavLink to="/about">About Us</NavLink></Menu.Item>,
         <Menu.Item key="/contact"><NavLink to="/contact">Contact Us</NavLink></Menu.Item>,
        
@@ -36,7 +36,8 @@ class NavBar extends Component {
       ];
     }else{
       menuItems = [
-          <Menu.Item key="/"><NavLink to="/">Home</NavLink></Menu.Item>,
+          <Menu.Item key="/"><NavLink to="/"><Icon type="home"></Icon>Home</NavLink></Menu.Item>,
+          <Menu.Item key="/create-poll"><NavLink to="/create-poll"><Icon type="plus-square"></Icon>Create Poll</NavLink></Menu.Item>,
           <SubMenu key="4" title={<span><Icon type="user" />Profile</span>}>
             <Menu.Item key="/profile"><NavLink to="/profile"><span><Icon type="user"></Icon>{this.props.principal.userName}</span></NavLink></Menu.Item>
             <Menu.Item key="logout">><span><Icon type="logout"></Icon>Logout</span></Menu.Item>
