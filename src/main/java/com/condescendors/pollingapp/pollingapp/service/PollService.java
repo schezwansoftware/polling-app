@@ -149,7 +149,7 @@ public class PollService {
         poll.setQuestion(pollRequest.getQuestion());
 
         pollRequest.getChoices().forEach(choiceRequest -> {
-            poll.addChoice(new Choice(choiceRequest.getText()));
+            poll.addChoice(new Choice(choiceRequest.getText(),poll));
         });
 
         Instant now = Instant.now();
