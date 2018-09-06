@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import './styles/css/create-poll.css';
-import { Layout, Form, Input, Button, Icon } from 'antd';
+import { Layout, Form, Input, Button, Icon, Col,Select } from 'antd';
 import {MAX_CHOICES,POLL_CHOICE_MAX_LENGTH,POLL_QUESTION_MAX_LENGTH,POLL_QUESTION_MIN_LENGTH} from '../constants/constants';
+import {createPoll} from '../services/posts.service';
 
 const {TextArea}=Input;
 const FormItem=Form.Item;
+const Option= Select.Option;
 export default class  CreatePoll extends Component{
 
     constructor(props){
@@ -31,19 +33,24 @@ export default class  CreatePoll extends Component{
         this.removeChoice=this.removeChoice.bind(this);
         this.handleChoiceChange=this.handleChoiceChange.bind(this);
         this.handleQuestionChange=this.handleQuestionChange.bind(this);
+        this.handlePollsDaysChange=this.handlePollsDaysChange.bind(this);
+        this.handlePollsHoursChange=this.handlePollsHoursChange.bind(this);
         this.isFormInvalid=this.isFormInvalid.bind(this);
     }
 
     handleSubmit(event){
         event.preventDefault();
-        const poll={
+        const pollRequest={
             question: this.state.question.value,
             choices: this.state.choices.map((choice) => {
               return {text : choice.text}  
-            })
+            }),
+            pollLength : this.state.pollLength
         }
 
-        console.log(poll);
+        console.log(pollRequest);
+
+        createPoll(pollRequest).then(response => {console.log(response)});
     }
 
     addChoice(){
@@ -129,6 +136,22 @@ export default class  CreatePoll extends Component{
         });
     }
 
+
+    handlePollsDaysChange(value){
+        const pollLength=Object.assign(this.state.pollLength,{days: value})
+
+        this.setState({
+            pollLength: pollLength
+        });
+    }
+
+    handlePollsHoursChange(value){
+        const pollLength=Object.assign(this.state.pollLength,{hours: value})
+
+        this.setState({
+            pollLength: pollLength
+        });
+    }
     removeChoice(index){
         const choices=this.state.choices.slice();
         this.setState({
@@ -175,6 +198,42 @@ export default class  CreatePoll extends Component{
         <Button type="dashed" size="large" onClick={this.addChoice} disabled={this.state.choices.length >= MAX_CHOICES}><Icon type="plus" /> Add a choice</Button>
         </FormItem>
 
+            <FormItem className="poll-form-row">
+                <Col xs={24} sm={4}>
+                    Poll length: 
+                </Col>
+                <Col xs={24} sm={20}>    
+                    <span style = {{ marginRight: '18px' }}>
+                        <Select 
+                            name="days"
+                            defaultValue="1" 
+                            value={this.state.pollLength.days}
+                            onChange={this.handlePollsDaysChange}
+                            style={{ width: 60 }} >
+                            {
+                                Array.from(Array(8).keys()).map(i => 
+                                    <Option key={i}>{i}</Option>                                        
+                                )
+                            }
+                        </Select> &nbsp;Days
+                    </span>
+                    <span>
+                        <Select 
+                            name="hours"
+                            defaultValue="0" 
+                            value={this.state.pollLength.hours}
+                            onChange={this.handlePollsHoursChange}
+                            style={{ width: 60 }} >
+                            {
+                                Array.from(Array(24).keys()).map(i => 
+                                    <Option key={i}>{i}</Option>                                        
+                                )
+                            }
+                        </Select> &nbsp;Hours
+                    </span>
+                </Col>
+             </FormItem>
+                        
         <FormItem  className="poll-form-row">
             <Button disabled={this.isFormInvalid()} className="create-poll-form-button" type="primary" size="large" htmlType="submit">Create Poll</Button>
         </FormItem>

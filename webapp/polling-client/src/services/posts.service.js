@@ -82,3 +82,13 @@ export function checkEmailAvailability(email){
         }
     });
 }
+
+
+export function createPoll(pollRequest){
+    const url=`/api/polls`;
+    return request({
+        url: url,
+        method: 'POST',
+        body: JSON.stringify(pollRequest)
+    });
+}
