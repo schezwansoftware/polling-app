@@ -1,5 +1,8 @@
 import React,{Component} from 'react';
-import { Form, Input, Button, Card, Modal,Alert } from 'antd';
+import {
+     Form, Input, Button,
+     Card, Modal,Alert
+     } from 'antd';
 import {Link} from 'react-router-dom';
 import './styles/css/register.css';
 

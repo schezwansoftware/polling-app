@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { Avatar } from 'antd';
 import './styles/css/profile.css';
+import {formatDate} from '../services/date-format.service';
 class Profile extends Component{
     constructor(props){
         super(props);
@@ -25,7 +26,7 @@ class Profile extends Component{
                                 <div className="full-name">{this.state.currentUser.firstName+' '+this.state.currentUser.lastName}</div>
                                 <div className="username">@{this.state.currentUser.userName}</div>
                                 <div className="user-joined">
-                                    Joined {this.state.currentUser.createdAt}
+                                    Joined {formatDate(this.state.currentUser.createdAt)}
                                 </div>
                             </div>
                         </div>

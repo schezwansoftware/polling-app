@@ -13,6 +13,7 @@ import Profile from './components/profile.component';
 import {Modal} from 'antd';
 import PrivateRoute from './commons/privateroute';
 import NotFound from './components/notfound.component';
+import CreatePoll from './components/create-poll.component';
 
 class App extends Component {
 
@@ -79,6 +80,8 @@ class App extends Component {
           <Route path="/login"  render={(props)=> <Login onLogin={this.onLogin} {...props}/>}></Route>
           <Route path="/register" exact component={Register}></Route>
           <PrivateRoute isAuthenticated={this.state.isAuthenticated} path='/profile' component={Profile} currentUser={this.state.currentUser} handleLogout={this.handleLogout}></PrivateRoute>
+          <PrivateRoute isAuthenticated={this.state.isAuthenticated} path='/create-poll' component={CreatePoll} currentUser={this.state.currentUser} handleLogout={this.handleLogout}></PrivateRoute>
+
           <Route component={NotFound}/>
         </Switch>
         </div>

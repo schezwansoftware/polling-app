@@ -7,7 +7,9 @@ import com.condescendors.pollingapp.pollingapp.repository.UserRepository;
 import com.condescendors.pollingapp.pollingapp.web.rest.error.AppException;
 import com.condescendors.pollingapp.pollingapp.web.rest.error.BadRequestAlertException;
 import com.condescendors.pollingapp.pollingapp.web.rest.vm.ManagedUserVM;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +32,7 @@ public class AccountResource {
 
     @PostMapping("/account/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser(@Valid @RequestBody ManagedUserVM managedUserVM){
+    public ResponseEntity<User> registerUser(@Valid @RequestBody ManagedUserVM managedUserVM){
 
         userRepository.findByUserNameOrEmail(managedUserVM.getUserName(),managedUserVM.getEmail()).ifPresent(user -> {throw new AppException("User Name Already Taken");});
 
@@ -40,8 +42,8 @@ public class AccountResource {
         authorities.add(authority);
         String password=passwordEncoder.encode(managedUserVM.getPassword());
         User user=new User(managedUserVM.getFirstName(),managedUserVM.getLastName(),managedUserVM.getUserName(),managedUserVM.getEmail(),password,authorities);
-
         userRepository.save(user);
+        return ResponseEntity.ok(user);
     }
 
 
