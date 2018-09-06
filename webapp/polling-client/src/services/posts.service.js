@@ -1,4 +1,4 @@
-import {API_BASE_URL,ACCESS_TOKEN} from '../constants/constants';
+import {ACCESS_TOKEN} from '../constants/constants';
 
 const request=(options) => {
     const headers = new Headers({
@@ -26,7 +26,7 @@ const request=(options) => {
 
 export function login(loginVM){
    return request({
-       url : API_BASE_URL + "/api/authenticate",
+       url : "/api/authenticate",
        method : 'POST',
        body : JSON.stringify(loginVM)
    });
@@ -38,7 +38,7 @@ export function getCurrentUser(){
         return Promise.reject("No access token set.");
     }else{
         return request({
-            url : API_BASE_URL + "/api/users/me",
+            url : "/api/users/me",
             method: "GET" 
         });
     }
@@ -46,4 +46,39 @@ export function getCurrentUser(){
 
 export function logout(){
     localStorage.removeItem(ACCESS_TOKEN);
+}
+
+
+export function register(managedUserVM){
+   return request({
+        url: '/api/account/register',
+        method: 'POST',
+        body: JSON.stringify(managedUserVM)
+    });
+}
+
+export function checkUserNameAvailability(userName){
+    const url=`/api/account/username-available/${userName}`;
+   return fetch(url,{
+       method: 'GET'
+   }).then(response =>{
+       if(response.status === 202){
+           return true;
+       }else if(response.status === 400){
+           return false;
+       }
+   });
+}
+
+export function checkEmailAvailability(email){
+    const url= `/api/account/email-available/${email}`;
+    return fetch(url,{
+        method: 'GET'
+    }).then(response => {
+        if(response.status === 202){
+            return true;
+        }else if(response.status === 400){
+            return false;
+        }
+    });
 }
