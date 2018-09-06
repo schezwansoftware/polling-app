@@ -25,8 +25,9 @@ public class Choice implements Serializable{
     public Choice() {
     }
 
-    public Choice(@NotBlank @Size(min = 4, max = 50) String text) {
+    public Choice(@NotBlank @Size(min = 4, max = 50) String text, Poll poll) {
         this.text = text;
+        this.poll=poll;
     }
 
     public Long getId() {

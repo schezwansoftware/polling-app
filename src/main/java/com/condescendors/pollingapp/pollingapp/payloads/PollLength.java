@@ -5,10 +5,8 @@ import java.io.Serializable;
 
 public class PollLength implements Serializable{
 
-    @Size(max = 7)
     private Integer days;
 
-    @Size(max = 23)
     private Integer hours;
 
 
