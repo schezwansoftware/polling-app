@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './styles/css/create-poll.css';
-import { Layout, Form, Input, Button, Icon, Col,Select } from 'antd';
+import { Layout, Form, Input, Button, Icon, Col,Select, Modal } from 'antd';
 import {MAX_CHOICES,POLL_CHOICE_MAX_LENGTH,POLL_QUESTION_MAX_LENGTH,POLL_QUESTION_MIN_LENGTH} from '../constants/constants';
 import {createPoll} from '../services/posts.service';
 
@@ -26,7 +26,8 @@ export default class  CreatePoll extends Component{
                 {
                     text: ''
                 }
-            ]
+            ],
+            isSaving: false
         }
         this.handleSubmit=this.handleSubmit.bind(this);
         this.addChoice=this.addChoice.bind(this);
@@ -50,7 +51,39 @@ export default class  CreatePoll extends Component{
 
         console.log(pollRequest);
 
-        createPoll(pollRequest).then(response => {console.log(response)});
+        this.setState({
+            isSaving: true
+        })
+
+        createPoll(pollRequest)
+        .then(() => {
+            Modal.success({
+                title: 'Poll created',
+                content: 'Your Poll has been added successfully'
+            });
+
+            this.setState({
+                isSaving: false
+            });
+            this.props.history.push("/");
+        }).catch((err) => {
+
+            if(err.status===401){
+                Modal.error({
+                    title: 'UnAuthorized',
+                    content:'Please login and then create a poll'
+                });
+            }else{
+                Modal.error({
+                    title: 'Internal Server Error',
+                    content:err.message || 'OOps!! Something terrible happened'
+                });
+            }
+
+            this.setState({
+                isSaving: false
+            });
+        });
     }
 
     addChoice(){
@@ -235,7 +268,7 @@ export default class  CreatePoll extends Component{
              </FormItem>
                         
         <FormItem  className="poll-form-row">
-            <Button disabled={this.isFormInvalid()} className="create-poll-form-button" type="primary" size="large" htmlType="submit">Create Poll</Button>
+            <Button disabled={this.isFormInvalid() || this.state.isSaving} loading={this.state.isSaving} className="create-poll-form-button" type="primary" size="large" htmlType="submit">Create Poll</Button>
         </FormItem>
         </Form>
     </Layout>
