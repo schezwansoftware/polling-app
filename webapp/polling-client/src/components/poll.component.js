@@ -9,9 +9,17 @@ export default class PollComponent extends Component {
 
     constructor(props) {
         super(props);
+        this.state={
+            poll: props.poll,
+            user:props.user
+        }
     }
 
     render() {
+        const pollChoices=[];
+        this.state.poll.choices.forEach((choice,choiceIndex) => {
+            pollChoices.push(<Radio className="poll-choice-radio" key={choice.id} value={choice.id}>{choice.text}</Radio> )       
+        });
         return (
             <div className="polls-container">
                 <div className="polls-content">
@@ -20,13 +28,13 @@ export default class PollComponent extends Component {
                             <Link className="creator-link" to="/profile">
                                 <Avatar className="poll-creator-avatar"
                                         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png">
-                                    {this.props.currentUser.firstName}
+                                    {this.state.user.userName}
                                 </Avatar>
                                 <span className="poll-creator-name">
-                                     {`${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`}
+                                     {`${this.state.user.name}`}
                                  </span>
                                 <span className="poll-creator-username">
-                                  @{this.props.currentUser.userName}
+                                  @{this.state.user.userName}
                                  </span>
                                 <span className="poll-creation-date">
                                     12-10-2010
@@ -34,16 +42,14 @@ export default class PollComponent extends Component {
                             </Link>
                         </div>
                         <div className="poll-question">
-                            What is the question
+                            {this.state.poll.question}
                         </div>
                     </div>
                     <div className="poll-choices">
                     <RadioGroup 
                         className="poll-choice-radio-group" 
                         >
-                        <Radio className="poll-choice-radio" key="1" value="abc">abc</Radio>
-                        <Radio className="poll-choice-radio" key="2" value="def">abc</Radio>
-                        <Radio className="poll-choice-radio" key="3" value="hig">abc</Radio>
+                        {pollChoices}
                     </RadioGroup>
                 </div>
                 </div>

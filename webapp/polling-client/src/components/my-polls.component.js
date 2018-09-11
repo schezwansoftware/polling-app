@@ -11,16 +11,21 @@ export default class  MyPolls extends Component{
         super(props);
         this.state={
             isLoading: false,
-            polls: []
+            polls: [],
+            userDetails:{
+                id: null,
+                userName:null,
+                name:null
+            }
         }
     }
 
 
     componentDidMount(){
-        this.loadAllPosts();
+        this.loadAllPolls();
     }
 
-    loadAllPosts(){
+    loadAllPolls(){
         this.setState({
             isLoading: true
         });
@@ -28,11 +33,14 @@ export default class  MyPolls extends Component{
         .then(response=>
             {
                 this.setState({
-                    polls: response,
+                    polls: response.polls,
+                    userDetails:{
+                        userName: response.userName,
+                        name: response.name,
+                        id:response.id
+                    },
                     isLoading: false
                 });
-
-                console.log(this.state.polls);
             })
         .catch(err=>{
             if(err.status=== 401){
@@ -53,16 +61,36 @@ export default class  MyPolls extends Component{
         });
     }
     render(){
+        const pollViews=[];
+        this.state.polls.forEach((poll,pollIndex) => {
+            pollViews.push(<PollComponent 
+                poll={poll}
+                user={this.state.userDetails}
+                key={poll.id}
+
+                />)
+        });
         if(this.state.isLoading){
             return <LoadingIndicator />
         }else{
-            return <PollComponent {...this.props}/>
+            return(
+                <div className="polls-container">
+                {pollViews}
+                 {
+                (!this.state.isLoading && this.state.polls.length === 0) ? 
+                <PollsNotFound /> : null
+
+                }
+                 </div>
+            );
         }
     }
 }
 
 const PollsNotFound=()=>{
-return <h1>Your Polls</h1>
+return (<div className="no-polls-found">
+<span>Sorry! No polls found</span>
+</div>);
 }
 
 
