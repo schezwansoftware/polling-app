@@ -4,16 +4,22 @@ import com.condescendors.pollingapp.pollingapp.constants.AppConstants;
 import com.condescendors.pollingapp.pollingapp.models.Poll;
 import com.condescendors.pollingapp.pollingapp.payloads.*;
 import com.condescendors.pollingapp.pollingapp.security.CurrentUser;
+import com.condescendors.pollingapp.pollingapp.security.SecurityUtils;
 import com.condescendors.pollingapp.pollingapp.security.UserPrincipal;
 import com.condescendors.pollingapp.pollingapp.service.PollService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -36,7 +42,7 @@ public class PollsController {
     }
 
     @PostMapping("/polls")
-    public ResponseEntity<ResponseDTO> createPoll(@Valid @RequestBody PollRequest pollRequest) {
+    public ResponseEntity<ResponseDTO> createPoll( @RequestBody PollRequest pollRequest) {
         Poll poll = pollService.createPoll(pollRequest);
 
         URI location = ServletUriComponentsBuilder
@@ -78,5 +84,11 @@ public class PollsController {
                                                        @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                                        @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
         return pollService.getPollsVotedBy(username, currentUser, page, size);
+    }
+
+    @GetMapping("/mypolls")
+    public UserPollsDTO getAllPollsByUser(){
+        String userName= SecurityUtils.getCurrentUserLogin();
+        return pollService.findAllPollsByUser(userName);
     }
 }

@@ -66,4 +66,14 @@ public class Choice implements Serializable{
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
+    @Override
+    public String toString() {
+        return "Poll{" +
+                "id=" + getId() +
+                ", text='" + getText() + "'" +
+                ", pollid='" + getPoll().getId() + "'" +
+                "}";
+    }
 }

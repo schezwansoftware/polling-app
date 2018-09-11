@@ -17,6 +17,8 @@ public interface PollRepository extends JpaRepository<Poll,Long>{
 
     Page<Poll> findByCreatedBy(Long userId, Pageable pageable);
 
+    List<Poll> findAllByCreatedBy(Long id);
+
     long countByCreatedBy(Long userId);
 
     List<Poll> findByIdIn(List<Long> pollIds);

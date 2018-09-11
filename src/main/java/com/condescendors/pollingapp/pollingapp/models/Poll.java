@@ -79,4 +79,15 @@ public class Poll extends UserDateAudit implements Serializable{
     public void removeChoice(Choice choice){
         this.choices.remove(choice);
     }
+
+
+    @Override
+    public String toString() {
+        return "Choice{" +
+                "id=" + getId() +
+                ", question='" + getQuestion() + "'" +
+                ", expirytime='" + getExpiryTime() + "'" +
+                ", choices='" + getChoices() + "'" +
+                "}";
+    }
 }

@@ -38,6 +38,7 @@ class NavBar extends Component {
       menuItems = [
           <Menu.Item key="/"><NavLink to="/"><Icon type="home"></Icon>Home</NavLink></Menu.Item>,
           <Menu.Item key="/create-poll"><NavLink to="/create-poll"><Icon type="plus-square"></Icon>Create Poll</NavLink></Menu.Item>,
+          <Menu.Item key="/my-polls"><NavLink to="/my-polls"><Icon type="eye"></Icon>My Polls</NavLink></Menu.Item>,
           <SubMenu key="4" title={<span><Icon type="user" />Profile</span>}>
             <Menu.Item key="/profile"><NavLink to="/profile"><span><Icon type="user"></Icon>{this.props.principal.userName}</span></NavLink></Menu.Item>
             <Menu.Item key="logout">><span><Icon type="logout"></Icon>Logout</span></Menu.Item>

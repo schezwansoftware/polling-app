@@ -92,3 +92,12 @@ export function createPoll(pollRequest){
         body: JSON.stringify(pollRequest)
     });
 }
+
+
+export function getAllPostsByUser(){
+    const url='/api/mypolls'
+    return request({
+        url: url,
+        method: 'GET'
+    });
+}

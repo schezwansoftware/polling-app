@@ -2,14 +2,12 @@ package com.condescendors.pollingapp.pollingapp.service;
 
 import com.condescendors.pollingapp.pollingapp.constants.AppConstants;
 import com.condescendors.pollingapp.pollingapp.models.*;
-import com.condescendors.pollingapp.pollingapp.payloads.PagedResponse;
-import com.condescendors.pollingapp.pollingapp.payloads.PollRequest;
-import com.condescendors.pollingapp.pollingapp.payloads.PollResponse;
-import com.condescendors.pollingapp.pollingapp.payloads.VoteRequest;
+import com.condescendors.pollingapp.pollingapp.payloads.*;
 import com.condescendors.pollingapp.pollingapp.repository.PollRepository;
 import com.condescendors.pollingapp.pollingapp.repository.UserRepository;
 import com.condescendors.pollingapp.pollingapp.repository.VoteRepository;
 import com.condescendors.pollingapp.pollingapp.security.UserPrincipal;
+import com.condescendors.pollingapp.pollingapp.service.mapper.PollMapper;
 import com.condescendors.pollingapp.pollingapp.web.rest.error.BadRequestAlertException;
 import com.condescendors.pollingapp.pollingapp.web.rest.error.ResourceNotFoundException;
 import com.condescendors.pollingapp.pollingapp.web.rest.util.ModelMapper;
@@ -24,9 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,10 +37,13 @@ public class PollService {
 
     private final PollRepository pollRepository;
 
-    public PollService(UserRepository userRepository, VoteRepository voteRepository, PollRepository pollRepository) {
+    private final PollMapper pollMapper;
+
+    public PollService(UserRepository userRepository, VoteRepository voteRepository, PollRepository pollRepository, PollMapper pollMapper) {
         this.userRepository = userRepository;
         this.voteRepository = voteRepository;
         this.pollRepository = pollRepository;
+        this.pollMapper = pollMapper;
     }
 
 
@@ -272,6 +271,14 @@ public class PollService {
 
         return creators.stream()
                 .collect(Collectors.toMap(User::getId, Function.identity()));
+    }
+
+
+    public UserPollsDTO findAllPollsByUser(String userName){
+        User user=userRepository.findByUserName(userName).get();
+        log.info("request to get all Polls for user, {}",userName);
+        List<PollResponse> pollResponses=pollMapper.toResponse(pollRepository.findAllByCreatedBy(user.getId()));
+        return new UserPollsDTO(user.getId(),userName,user.getFirstName()+ " "+ user.getLastName(),pollResponses);
     }
 }
 

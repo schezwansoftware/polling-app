@@ -14,6 +14,7 @@ import {Modal} from 'antd';
 import PrivateRoute from './commons/privateroute';
 import NotFound from './components/notfound.component';
 import CreatePoll from './components/create-poll.component';
+import MyPolls from './components/my-polls.component';
 
 class App extends Component {
 
@@ -81,6 +82,7 @@ class App extends Component {
           <Route path="/register" exact component={Register}></Route>
           <PrivateRoute isAuthenticated={this.state.isAuthenticated} path='/profile' component={Profile} currentUser={this.state.currentUser} handleLogout={this.handleLogout}></PrivateRoute>
           <PrivateRoute isAuthenticated={this.state.isAuthenticated} path='/create-poll' component={CreatePoll} currentUser={this.state.currentUser} handleLogout={this.handleLogout}></PrivateRoute>
+          <PrivateRoute isAuthenticated={this.state.isAuthenticated} path='/my-polls' component={MyPolls} currentUser={this.state.currentUser} handleLogout={this.handleLogout}></PrivateRoute>
 
           <Route component={NotFound}/>
         </Switch>
