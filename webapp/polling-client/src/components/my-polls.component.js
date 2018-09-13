@@ -79,7 +79,6 @@ export default class  MyPolls extends Component{
                  {
                 (!this.state.isLoading && this.state.polls.length === 0) ? 
                 <PollsNotFound /> : null
-
                 }
                  </div>
             );
